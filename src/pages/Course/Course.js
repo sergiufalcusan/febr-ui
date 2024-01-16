@@ -1,0 +1,126 @@
+import './Course.css';
+import Template from "../../components/Template/Template";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    createNewCourse,
+    enrollStudentRequest,
+    getAllCourses,
+    selectAllCourses,
+    selectUpdateToggle
+} from "../../features/auth/courseSlice";
+import Table from "react-bootstrap/Table";
+import { useEffect, useState } from "react";
+import { Button, Col, Form, Row } from "react-bootstrap";
+import moment from 'moment';
+import { selectRole } from "../../features/auth/authSlice";
+import { getAllStudents, selectAllStudents } from "../../features/auth/studentSlice";
+
+function Course() {
+    const courses = useSelector(selectAllCourses);
+    const updateToggle = useSelector(selectUpdateToggle);
+    const role = useSelector(selectRole);
+    const dispatch = useDispatch();
+    const students = useSelector(selectAllStudents);
+
+    const [ name, setName ] = useState("");
+    const [ description, setDescription ] = useState("");
+    const [ schedule, setSchedule ] = useState("");
+
+    const [ student, setStudent ] = useState("");
+    const [ course, setCourse ] = useState("");
+
+    useEffect(() => {
+        dispatch(getAllCourses());
+        dispatch(getAllStudents());
+    }, [ dispatch ]);
+
+    useEffect(() => {
+        dispatch(getAllCourses());
+    }, [ updateToggle, dispatch ]);
+
+    function createCourse() {
+        dispatch(createNewCourse({ name, description, schedule: moment(schedule).format("YYYY-MM-DDTHH:mm:ss") }));
+    }
+
+    function enrollStudent() {
+        console.log(student, course)
+        dispatch(enrollStudentRequest({ studentId: student, courseId: course }));
+    }
+
+    console.log(students);
+
+    return (
+        <Template>
+            <Table striped bordered hover>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Schedule</th>
+                </tr>
+                </thead>
+                <tbody>
+                {courses.map((course, i) => (
+                    <tr key={i}>
+                        <td>{course.name}</td>
+                        <td>{course.description}</td>
+                        <td>{course.schedule}</td>
+                    </tr>
+                ))}
+                </tbody>
+            </Table>
+
+            {role === "ROLE_TEACHER" && (
+                <Row>
+                    <Col xs="3">
+                        <Form>
+                            <Form.Group className="mb-3" controlId="name">
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control placeholder="Name" value={name}
+                                              onChange={e => setName(e.target.value)}/>
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="description">
+                                <Form.Label column sm="2">Description</Form.Label>
+                                <Form.Control type="text" placeholder="Description" value={description}
+                                              onChange={e => setDescription(e.target.value)}/>
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="schedule">
+                                <Form.Label column sm="2">Schedule</Form.Label>
+                                <Form.Control type="date" placeholder="schedule" value={schedule}
+                                              onChange={e => setSchedule(e.target.value)}/>
+                            </Form.Group>
+
+                            <Button variant="primary" onClick={createCourse}>Create course</Button>
+                        </Form>
+                    </Col>
+                    <Col xs="3">
+                        <Form>
+                            <Form.Group className="mb-3" controlId="student">
+                                <Form.Label column>Select student</Form.Label>
+                                <Form.Select aria-label="Select student" onChange={e => setStudent(e.target.value)}>
+                                    <option>Select student</option>
+                                    {students.map((student, i) => (
+                                        <option key={i}
+                                                value={student.id}>{student.firstName} {student.lastName}</option>
+                                    ))}
+                                </Form.Select>
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="course">
+                                <Form.Label column>Select course</Form.Label>
+                                <Form.Select aria-label="Select course" onChange={e => setCourse(e.target.value)}>
+                                    <option>Select course</option>
+                                    {courses.map((course, i) => (
+                                        <option key={i} value={course.id}>{course.name}</option>
+                                    ))}
+                                </Form.Select>
+                            </Form.Group>
+                            <Button variant="primary" onClick={enrollStudent}>Enroll</Button>
+                        </Form>
+                    </Col>
+                </Row>
+            )}
+        </Template>
+    );
+}
+
+export default Course;
