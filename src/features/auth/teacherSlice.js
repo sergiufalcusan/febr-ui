@@ -27,7 +27,13 @@ export const createNewTeacher = createAsyncThunk('teacher/new', async ({firstNam
 export const teacherSlice = createSlice({
     name: 'teacher',
     initialState,
-    reducers: {},
+    reducers: {
+        logout: (state) => {
+            state.all = [];
+            state.error = null;
+            state.updateToggle = false;
+        }
+    },
     extraReducers(builder) {
         builder
             .addCase(getAllTeachers.fulfilled, (state, action) => {
@@ -47,3 +53,5 @@ export const teacherSlice = createSlice({
 
 export const selectAllTeachers = state => state.teacher.all;
 export const selectUpdateToggle = state => state.teacher.updateToggle;
+
+export const { logout } = teacherSlice.actions

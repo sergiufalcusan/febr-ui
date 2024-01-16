@@ -14,6 +14,7 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 import moment from 'moment';
 import { selectRole } from "../../features/auth/authSlice";
 import { getAllStudents, selectAllStudents } from "../../features/auth/studentSlice";
+import { useNavigate } from "react-router-dom";
 
 function Course() {
     const courses = useSelector(selectAllCourses);
@@ -29,6 +30,8 @@ function Course() {
     const [ student, setStudent ] = useState("");
     const [ course, setCourse ] = useState("");
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         dispatch(getAllCourses());
         dispatch(getAllStudents());
@@ -43,11 +46,14 @@ function Course() {
     }
 
     function enrollStudent() {
-        console.log(student, course)
         dispatch(enrollStudentRequest({ studentId: student, courseId: course }));
     }
 
-    console.log(students);
+    function onClickCourse(id) {
+        if (role === "ROLE_TEACHER") {
+            navigate(`/course/${id}`);
+        }
+    }
 
     return (
         <Template>
@@ -61,7 +67,7 @@ function Course() {
                 </thead>
                 <tbody>
                 {courses.map((course, i) => (
-                    <tr key={i}>
+                    <tr key={i} onClick={() => onClickCourse(course.id)}>
                         <td>{course.name}</td>
                         <td>{course.description}</td>
                         <td>{course.schedule}</td>

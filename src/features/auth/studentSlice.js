@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from "axios";
+import { teacherSlice } from "./teacherSlice";
 
 const initialState = {
     all: [],
@@ -26,7 +27,13 @@ export const createNewStudent = createAsyncThunk('student/new', async ({firstNam
 export const studentSlice = createSlice({
     name: 'student',
     initialState,
-    reducers: {},
+    reducers: {
+        logout: (state) => {
+            state.all = [];
+            state.error = null;
+            state.updateToggle = false;
+        }
+    },
     extraReducers(builder) {
         builder
             .addCase(getAllStudents.fulfilled, (state, action) => {
@@ -46,3 +53,5 @@ export const studentSlice = createSlice({
 
 export const selectAllStudents = state => state.student.all;
 export const selectUpdateToggle = state => state.student.updateToggle;
+
+export const { logout } = teacherSlice.actions

@@ -2,19 +2,32 @@ import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUserRequest, selectFirstName, selectIsLoggedIn, selectRole } from "../../features/auth/authSlice";
 import { useEffect } from "react";
+import { logout as authLogout } from "../../features/auth/authSlice";
+import { logout as teacherLogout } from "../../features/auth/teacherSlice";
+import { logout as studentLogout } from "../../features/auth/studentSlice";
+import { logout as courseLogout } from "../../features/auth/courseSlice";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
     const isLoggedIn = useSelector(selectIsLoggedIn);
     const firstName = useSelector(selectFirstName);
     const role = useSelector(selectRole);
-
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (isLoggedIn) {
             dispatch(currentUserRequest({ token: localStorage.getItem("token") }));
         }
     }, [dispatch, isLoggedIn]);
+
+    const logout = () => {
+        dispatch(authLogout());
+        dispatch(teacherLogout());
+        dispatch(studentLogout());
+        dispatch(courseLogout());
+        navigate("/");
+    }
 
     return (
         <header className="App-header">
@@ -40,16 +53,18 @@ function Header() {
                                     <NavDropdown.Item href="/students">Students</NavDropdown.Item>
                                 </NavDropdown>
                             )}
-                            {isLoggedIn && role === "ROLE_Student" && (
-                                <NavDropdown title="Teacher" id="basic-nav-dropdown">
+                            {isLoggedIn && role === "ROLE_STUDENT" && (
+                                <NavDropdown title="Student" id="basic-nav-dropdown">
                                     <NavDropdown.Item href="/courses">Courses</NavDropdown.Item>
                                 </NavDropdown>
                             )}
                         </Nav>
                         {!isLoggedIn ? (
                             <Nav.Link href="/login" className="justify-content-end">Login</Nav.Link>
-                        ) : (
-                            <Nav.Link href="/" className="justify-content-end">Welcome {firstName}</Nav.Link>
+                        ) : (<>
+                                <Nav.Link href="/" className="justify-content-end">Welcome {firstName} &nbsp;</Nav.Link>
+                                <Nav.Link className="justify-content-end" onClick={logout}>Logout</Nav.Link>
+                            </>
                         )}
                     </Navbar.Collapse>
                 </Container>
