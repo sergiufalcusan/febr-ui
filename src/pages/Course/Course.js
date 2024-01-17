@@ -38,8 +38,8 @@ function Course() {
     }, [ role, dispatch ]);
 
     useEffect(() => {
-        dispatch(getAllCourses());
-    }, [ updateToggle, dispatch ]);
+        dispatch(getAllCourses({role}));
+    }, [ updateToggle, dispatch, role ]);
 
     function createCourse() {
         dispatch(createNewCourse({ name, description, schedule: moment(schedule).format("YYYY-MM-DDTHH:mm:ss") }));

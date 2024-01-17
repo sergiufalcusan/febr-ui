@@ -20,6 +20,21 @@ const getCurrentUser = async (token) => {
     })
 }
 
+const token = localStorage.getItem("token");
+if (!!token) {
+    initialState.isLoggedIn = true
+
+    const res = await getCurrentUser(token);
+    if (res.status === 200) {
+        initialState.id = res.data.id;
+        initialState.email = res.data.email;
+        initialState.firstName = res.data.firstName;
+        initialState.lastName = res.data.lastName;
+        initialState.role = res.data.role;
+    }
+
+}
+
 export const loginRequest = createAsyncThunk('auth/login', async ({username, password}) => {
     const response = await axios.post(API_URL + '/auth/login', {username, password})
     return response.data

@@ -16,13 +16,6 @@ function Header() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!!token) {
-            dispatch(currentUserRequest({ token }));
-        }
-    }, []);
-
-    useEffect(() => {
         if (isLoggedIn) {
             dispatch(currentUserRequest({ token: localStorage.getItem("token") }));
         }
