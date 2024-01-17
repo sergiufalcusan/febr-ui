@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from "axios";
+import { API_URL } from "../constants";
 
 const initialState = {
     isLoggedIn: false,
@@ -12,35 +13,23 @@ const initialState = {
 };
 
 const getCurrentUser = async (token) => {
-    return await axios.get('http://localhost:8080/api/auth/me', {
+    return await axios.get(API_URL + '/auth/me', {
         headers: {
             'Authorization': 'Bearer ' + token
         }
     })
 }
 
-const token = localStorage.getItem("token");
-if (!!token) {
-    initialState.isLoggedIn = true
-
-    const res = await getCurrentUser(token);
-    if (res.status === 200) {
-        initialState.id = res.data.id;
-        initialState.email = res.data.email;
-        initialState.firstName = res.data.firstName;
-        initialState.lastName = res.data.lastName;
-        initialState.role = res.data.role;
-    }
-
-}
-
 export const loginRequest = createAsyncThunk('auth/login', async ({username, password}) => {
-    const response = await axios.post('http://localhost:8080/api/auth/login', {username, password})
+    const response = await axios.post(API_URL + '/auth/login', {username, password})
     return response.data
 })
 
 export const currentUserRequest = createAsyncThunk('auth/me', async({token}) => {
     const response = await getCurrentUser(token);
+    if (response.status !== 200) {
+        throw new Error("Error getting current user");
+    }
     return response.data;
 })
 
@@ -76,6 +65,12 @@ export const authSlice = createSlice({
             })
             .addCase(currentUserRequest.rejected, (state, action) => {
                 state.error = action.error.message
+                state.isLoggedIn = false;
+                state.id = null;
+                state.email = null;
+                state.firstName = null;
+                state.lastName = null;
+                state.role = 'ROLE_ANONYMOUS';
             })
     }
 })

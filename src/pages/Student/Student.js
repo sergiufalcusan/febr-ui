@@ -7,7 +7,7 @@ import {
     getAllStudents,
     selectAllStudents,
     selectUpdateToggle
-} from "../../features/auth/studentSlice";
+} from "../../features/studentSlice";
 import Table from "react-bootstrap/Table";
 import { Button, Col, Form } from "react-bootstrap";
 
@@ -35,6 +35,7 @@ function Student() {
 
     return (
         <Template>
+            <h4 className={`mb-3`}>Students</h4>
             <Table striped bordered hover>
                 <thead>
                 <tr>
@@ -56,22 +57,23 @@ function Student() {
 
             <Form>
                 <Col xs="3">
-                    <Form.Group className="mb-3" controlId="email">
+                    <h4 className={`mb-3`}>Create new student</h4>
+                    <Form.Group className="mb-2" controlId="email">
                         <Form.Label>Email address</Form.Label>
                         <Form.Control type="email" placeholder="name@example.com" value={email}
                                       onChange={e => setEmail(e.target.value)}/>
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="firstname">
+                    <Form.Group className="mb-2" controlId="firstname">
                         <Form.Label column sm="2">Firstname</Form.Label>
                         <Form.Control type="email" placeholder="First Name" value={firstName}
                                       onChange={e => setFirstName(e.target.value)}/>
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="lastname">
+                    <Form.Group className="mb-2" controlId="lastname">
                         <Form.Label column sm="2">Lastname</Form.Label>
                         <Form.Control type="email" placeholder="Last Name" value={lastName}
                                       onChange={e => setLastName(e.target.value)}/>
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="password">
+                    <Form.Group className="mb-4" controlId="password">
                         <Form.Label column sm="2">Password</Form.Label>
                         <Form.Control type="password" placeholder="Password" value={password}
                                       onChange={e => setPassword(e.target.value)}/>

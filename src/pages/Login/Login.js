@@ -3,7 +3,7 @@ import Template from "../../components/Template/Template";
 import { Button, Col, Form } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginRequest, selectIsLoggedIn } from "../../features/auth/authSlice";
+import { loginRequest, selectIsLoggedIn } from "../../features/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 function Login() {

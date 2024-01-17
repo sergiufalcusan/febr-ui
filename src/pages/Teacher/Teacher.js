@@ -7,7 +7,7 @@ import {
     getAllTeachers,
     selectAllTeachers,
     selectUpdateToggle
-} from "../../features/auth/teacherSlice";
+} from "../../features/teacherSlice";
 import Table from "react-bootstrap/Table";
 import { Button, Col, Form } from "react-bootstrap";
 
@@ -35,6 +35,7 @@ function Teacher() {
 
     return (
         <Template>
+                <h4 className={`mb-3`}>Teachers</h4>
                 <Table striped bordered hover>
                     <thead>
                     <tr>
@@ -55,6 +56,7 @@ function Teacher() {
                 </Table>
 
             <Form>
+                <h4 className={`mb-3`}>Create new teacher</h4>
                 <Col xs="3">
                     <Form.Group className="mb-3" controlId="email">
                         <Form.Label>Email address</Form.Label>

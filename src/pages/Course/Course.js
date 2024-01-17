@@ -7,13 +7,13 @@ import {
     getAllCourses,
     selectAllCourses,
     selectUpdateToggle
-} from "../../features/auth/courseSlice";
+} from "../../features/courseSlice";
 import Table from "react-bootstrap/Table";
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import moment from 'moment';
-import { selectRole } from "../../features/auth/authSlice";
-import { getAllStudents, selectAllStudents } from "../../features/auth/studentSlice";
+import { selectRole } from "../../features/authSlice";
+import { getAllStudents, selectAllStudents } from "../../features/studentSlice";
 import { useNavigate } from "react-router-dom";
 
 function Course() {
@@ -33,9 +33,9 @@ function Course() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch(getAllCourses());
+        dispatch(getAllCourses({role}));
         dispatch(getAllStudents());
-    }, [ dispatch ]);
+    }, [ role, dispatch ]);
 
     useEffect(() => {
         dispatch(getAllCourses());
@@ -57,7 +57,8 @@ function Course() {
 
     return (
         <Template>
-            <Table striped bordered hover>
+            <h4>Courses</h4>
+            <Table className={`mt-5`} striped bordered hover>
                 <thead>
                 <tr>
                     <th>Name</th>
@@ -77,20 +78,21 @@ function Course() {
             </Table>
 
             {role === "ROLE_TEACHER" && (
-                <Row>
+                <Row className={`mt-5`}>
                     <Col xs="3">
+                        <h4 className={`mb-4`}>Create new course</h4>
                         <Form>
-                            <Form.Group className="mb-3" controlId="name">
+                            <Form.Group className="mb-2" controlId="name">
                                 <Form.Label>Name</Form.Label>
                                 <Form.Control placeholder="Name" value={name}
                                               onChange={e => setName(e.target.value)}/>
                             </Form.Group>
-                            <Form.Group className="mb-3" controlId="description">
+                            <Form.Group className="mb-2" controlId="description">
                                 <Form.Label column sm="2">Description</Form.Label>
                                 <Form.Control type="text" placeholder="Description" value={description}
                                               onChange={e => setDescription(e.target.value)}/>
                             </Form.Group>
-                            <Form.Group className="mb-3" controlId="schedule">
+                            <Form.Group className="mb-4" controlId="schedule">
                                 <Form.Label column sm="2">Schedule</Form.Label>
                                 <Form.Control type="date" placeholder="schedule" value={schedule}
                                               onChange={e => setSchedule(e.target.value)}/>
@@ -100,8 +102,9 @@ function Course() {
                         </Form>
                     </Col>
                     <Col xs="3">
+                        <h4 className={`mb-3`}>Enroll student</h4>
                         <Form>
-                            <Form.Group className="mb-3" controlId="student">
+                            <Form.Group className="mb-2" controlId="student">
                                 <Form.Label column>Select student</Form.Label>
                                 <Form.Select aria-label="Select student" onChange={e => setStudent(e.target.value)}>
                                     <option>Select student</option>
@@ -111,7 +114,7 @@ function Course() {
                                     ))}
                                 </Form.Select>
                             </Form.Group>
-                            <Form.Group className="mb-3" controlId="course">
+                            <Form.Group className="mb-4" controlId="course">
                                 <Form.Label column>Select course</Form.Label>
                                 <Form.Select aria-label="Select course" onChange={e => setCourse(e.target.value)}>
                                     <option>Select course</option>

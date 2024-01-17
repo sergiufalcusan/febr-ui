@@ -9,7 +9,7 @@ import {
     getEnrolledStudents, removeCourseRequest,
     selectSelectedCourse,
     unenrollStudentRequest, updateCourseRequest
-} from "../../features/auth/courseSlice";
+} from "../../features/courseSlice";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import moment from "moment";
 
@@ -56,7 +56,8 @@ function CourseDetails() {
             {course && (<>
             <Row>
                 <Col xs="3">
-                    <Form>
+                    <h4>Update course</h4>
+                    <Form className={`mt-3`}>
                         <Form.Group className="mb-3" controlId="name">
                             <Form.Label>Name</Form.Label>
                             <Form.Control placeholder="Name" value={name}
@@ -74,13 +75,13 @@ function CourseDetails() {
                         </Form.Group>
 
                         <Button variant="primary" onClick={updateCourse}>Update</Button>
-                        <Button variant="danger" onClick={removeCourse}>Remove</Button>
+                        <Button variant="danger" className={`ms-2`} onClick={removeCourse}>Remove</Button>
                     </Form>
                 </Col>
                 <Col xs="7">
                     <h4>Enrolled Students</h4>
                     {students.length > 0 ? (
-                        <Table striped bordered hover>
+                        <Table striped bordered hover className={`mt-5`}>
                             <thead>
                             <tr>
                                 <th>Student ID</th>

@@ -1,6 +1,14 @@
-# Getting Started with Create React App
+# Welcome to our Learning Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Teachers
+Empower educators to effortlessly manage courses and efficiently onboard students. Our platform
+provides a user-friendly interface, allowing you to focus on what matters most - delivering quality
+education.
+
+## Students
+Experience a streamlined learning journey! Access and view your enrolled courses with ease. Our
+intuitive design ensures a hassle-free experience, letting you concentrate on your studies without
+unnecessary complexities.
 
 ## Available Scripts
 

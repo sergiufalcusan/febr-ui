@@ -1,11 +1,11 @@
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { currentUserRequest, selectFirstName, selectIsLoggedIn, selectRole } from "../../features/auth/authSlice";
+import { currentUserRequest, selectFirstName, selectIsLoggedIn, selectRole } from "../../features/authSlice";
 import { useEffect } from "react";
-import { logout as authLogout } from "../../features/auth/authSlice";
-import { logout as teacherLogout } from "../../features/auth/teacherSlice";
-import { logout as studentLogout } from "../../features/auth/studentSlice";
-import { logout as courseLogout } from "../../features/auth/courseSlice";
+import { logout as authLogout } from "../../features/authSlice";
+import { logout as teacherLogout } from "../../features/teacherSlice";
+import { logout as studentLogout } from "../../features/studentSlice";
+import { logout as courseLogout } from "../../features/courseSlice";
 import { useNavigate } from "react-router-dom";
 
 function Header() {
@@ -14,6 +14,13 @@ function Header() {
     const role = useSelector(selectRole);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!!token) {
+            dispatch(currentUserRequest({ token }));
+        }
+    }, []);
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -43,7 +50,6 @@ function Header() {
                             {isLoggedIn && role === "ROLE_ADMIN" && (
                                 <NavDropdown title="Admin" id="basic-nav-dropdown">
                                     <NavDropdown.Item href="/teachers">Teachers</NavDropdown.Item>
-                                    <NavDropdown.Item href="/courses">Courses</NavDropdown.Item>
                                     <NavDropdown.Item href="/students">Students</NavDropdown.Item>
                                 </NavDropdown>
                             )}

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from "axios";
 import { teacherSlice } from "./teacherSlice";
+import { API_URL } from "../constants";
 
 const initialState = {
     all: [],
@@ -19,43 +20,48 @@ const axiosConfig = {
     }
 }
 
-export const getAllCourses = createAsyncThunk('course/getAll', async () => {
-    const response = await axios.get('http://localhost:8080/api/v1/course/all', axiosConfig)
-    return response.data
+export const getAllCourses = createAsyncThunk('course/getAll', async ({role}) => {
+    if (role === 'ROLE_TEACHER') {
+        const response = await axios.get(API_URL + '/v1/teacher/course/all', axiosConfig)
+        return response.data
+    } else {
+        const response = await axios.get(API_URL + '/v1/student/course/all', axiosConfig)
+        return response.data
+    }
 })
 
 export const createNewCourse = createAsyncThunk('teacher/new', async ({name, description, schedule}) => {
-    const response = await axios.post('http://localhost:8080/api/v1/teacher/course/create', {name, description, schedule}, axiosConfig)
+    const response = await axios.post(API_URL + '/v1/teacher/course/create', {name, description, schedule}, axiosConfig)
     return response.data
 })
 
 export const getCourseById = createAsyncThunk('course/getById', async ({id}) => {
-    const response = await axios.get(`http://localhost:8080/api/v1/course/${id}`, axiosConfig)
+    const response = await axios.get(`${API_URL}/v1/teacher/course/${id}`, axiosConfig)
     return response.data
 });
 
 export const getEnrolledStudents = createAsyncThunk('course/getEnrolledStudents', async ({id}) => {
-    const response = await axios.get(`http://localhost:8080/api/v1/teacher/course/${id}/students`, axiosConfig)
+    const response = await axios.get(`${API_URL}/v1/teacher/course/${id}/students`, axiosConfig)
     return response.data
 });
 
 export const enrollStudentRequest = createAsyncThunk('teacher/enroll', async ({courseId, studentId}) => {
-    const response = await axios.post('http://localhost:8080/api/v1/teacher/course/enroll', {studentId, courseId}, axiosConfig)
+    const response = await axios.post(API_URL + '/v1/teacher/course/enroll', {studentId, courseId}, axiosConfig)
     return response.data
 })
 
 export const unenrollStudentRequest = createAsyncThunk('teacher/unenroll', async ({courseId, studentId}) => {
-    const response = await axios.post('http://localhost:8080/api/v1/teacher/course/unenroll', {studentId, courseId}, axiosConfig)
+    const response = await axios.post(API_URL + '/v1/teacher/course/unenroll', {studentId, courseId}, axiosConfig)
     return response.data
 });
 
 export const removeCourseRequest = createAsyncThunk('teacher/removeCourse', async ({id}) => {
-    const response = await axios.delete(`http://localhost:8080/api/v1/teacher/course/${id}`, axiosConfig)
+    const response = await axios.delete(`${API_URL}/v1/teacher/course/${id}`, axiosConfig)
     return response.data
 });
 
 export const updateCourseRequest = createAsyncThunk('teacher/updateCourse', async ({id, name, description, schedule}) => {
-    const response = await axios.put(`http://localhost:8080/api/v1/teacher/course/${id}`, {name, description, schedule}, axiosConfig)
+    const response = await axios.put(`${API_URL}/v1/teacher/course/${id}`, {name, description, schedule}, axiosConfig)
     return response.data
 });
 

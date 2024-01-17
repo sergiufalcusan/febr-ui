@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from "axios";
 import { teacherSlice } from "./teacherSlice";
+import { API_URL } from "../constants";
 
 const initialState = {
     all: [],
@@ -15,12 +16,12 @@ const axiosConfig = {
 }
 
 export const getAllStudents = createAsyncThunk('student/getAll', async () => {
-    const response = await axios.get('http://localhost:8080/api/v1/student/all', axiosConfig)
+    const response = await axios.get(API_URL + '/v1/users/students', axiosConfig)
     return response.data
 })
 
 export const createNewStudent = createAsyncThunk('student/new', async ({firstName, lastName, email, password}) => {
-    const response = await axios.post('http://localhost:8080/api/v1/teacher/users/student/new', {firstName, lastName, email, password}, axiosConfig)
+    const response = await axios.post(API_URL + '/v1/teacher/users/student/new', {firstName, lastName, email, password}, axiosConfig)
     return response.data
 })
 
